@@ -13,6 +13,17 @@ spring:
       ddl-auto: update
   security:
     oauth2:
+      client:
+        registration:
+          auth0:
+            client-id: ${OIDC_CLIENT_ID}
+            client-secret: ${OIDC_CLIENT_SECRET}
+            scope:
+              - openid
+              - profile
+        provider:
+          auth0:
+            issuer-uri: https://dev-wh5gdfeyti4ssudx.eu.auth0.com/
       resourceserver:
         jwt:
           issuer-uri: https://dev-wh5gdfeyti4ssudx.eu.auth0.com/
