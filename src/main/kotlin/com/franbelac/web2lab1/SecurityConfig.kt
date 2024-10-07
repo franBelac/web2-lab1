@@ -13,6 +13,7 @@ class SecurityConfig {
     @Bean
     fun resourceServerFilter(http: HttpSecurity): SecurityFilterChain {
         http {
+            securityMatcher("/api/tickets")
             authorizeHttpRequests {
                 authorize("/api/tickets/total",permitAll)
                 authorize("/api/tickets",authenticated)
@@ -20,9 +21,8 @@ class SecurityConfig {
             oauth2ResourceServer {
                 jwt {  }
             }
-        }
 
-        http {
+            securityMatcher("/api/tickets/**")
             authorizeHttpRequests {
                 authorize("/api/tickets/**",authenticated)
             }
