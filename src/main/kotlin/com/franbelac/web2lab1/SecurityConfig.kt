@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.invoke
 @EnableWebSecurity
 class SecurityConfig {
     @Bean
-//    @Order(1)
+    @Order(1)
     fun resourceServerFilter(http: HttpSecurity): SecurityFilterChain {
         http {
             authorizeHttpRequests {
@@ -26,16 +26,15 @@ class SecurityConfig {
         return http.build()
     }
 
-//    @Bean
-//    @Order(2)
-//    fun loginFilter(http: HttpSecurity) : SecurityFilterChain {
-//        http {
-//            authorizeHttpRequests {
-//                authorize("/api/tickets/**",authenticated)
-//            }
-//            oauth2Login {  }
-//        }
-//        return http.build()
-//    }
-
+    @Bean
+    @Order(2)
+    fun loginFilter(http: HttpSecurity) : SecurityFilterChain {
+        http {
+            authorizeHttpRequests {
+                authorize("/api/tickets/**",authenticated)
+            }
+            oauth2Login {  }
+        }
+        return http.build()
+    }
 }

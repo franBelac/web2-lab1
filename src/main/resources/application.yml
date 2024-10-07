@@ -27,9 +27,3 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://dev-wh5gdfeyti4ssudx.eu.auth0.com/
-#
-#okta:
-#  oauth2:
-#    issuer: ${OIDC_ISSUER}
-#    client-id: ${OIDC_CLIENT_ID}
-#    client-secret: ${OIDC_CLIENT_SECRET}
