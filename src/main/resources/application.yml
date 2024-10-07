@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: web2-lab1
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-wh5gdfeyti4ssudx.eu.auth0.com/
+
+okta:
+  oauth2:
+    issuer: ${OIDC_ISSUER}
+    client-id: ${OIDC_CLIENT_ID}
+    client-secret: ${OIDC_CLIENT_SECRET}
