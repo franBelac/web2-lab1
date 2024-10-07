@@ -11,29 +11,31 @@ import org.springframework.security.config.annotation.web.invoke
 @Configuration
 @EnableWebSecurity
 class SecurityConfig {
+
     @Bean
     @Order(1)
-    fun resourceServerFilter(http: HttpSecurity): SecurityFilterChain {
+    fun loginFilter(http: HttpSecurity): SecurityFilterChain {
         http {
             authorizeHttpRequests {
-                authorize("/api/tickets/total",permitAll)
-                authorize("/api/tickets",authenticated)
+                authorize("/api/tickets/overview/**",authenticated)
             }
-            oauth2ResourceServer {
-                jwt {  }
-            }
+            oauth2Login {  }
         }
         return http.build()
     }
 
     @Bean
     @Order(2)
-    fun loginFilter(http: HttpSecurity) : SecurityFilterChain {
+    fun resourceServerFilter(http: HttpSecurity) : SecurityFilterChain {
         http {
             authorizeHttpRequests {
-                authorize("/api/tickets/**",authenticated)
+                authorize("/api/tickets",authenticated)
+                authorize("/api/tickets/total",permitAll)
             }
-            oauth2Login {  }
+
+            oauth2ResourceServer {
+                jwt {  }
+            }
         }
         return http.build()
     }

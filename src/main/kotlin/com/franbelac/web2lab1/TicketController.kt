@@ -26,7 +26,7 @@ class TicketController(private val ticketService: TicketService) {
         return ResponseEntity(qrCodeImage, headers, HttpStatus.CREATED)
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/overview/{id}")
     fun getTicketInfo(@PathVariable id: UUID): ResponseEntity<Ticket> {
         val ticket = ticketService.getTicketInfo(id)
         return ResponseEntity.ok(ticket)
