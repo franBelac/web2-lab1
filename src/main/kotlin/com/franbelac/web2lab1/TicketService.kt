@@ -18,7 +18,7 @@ class TicketService(private val ticketRepository: TicketRepository) {
         val ticket = Ticket(vatin = vatin, firstName = firstName, lastName = lastName)
         val savedTicket = ticketRepository.save(ticket)
 
-        val fullUrl = "https://web2-lab1-backend.onrender.com/api/tickets/${savedTicket.id}"
+        val fullUrl = "https://web2-lab1-backend.onrender.com/api/tickets/overview/${savedTicket.id}"
         val qrCodeImage = generateQRCodeImage(fullUrl)
 
         return Pair(fullUrl, qrCodeImage)
