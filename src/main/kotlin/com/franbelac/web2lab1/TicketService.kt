@@ -12,6 +12,9 @@ import kotlin.NoSuchElementException
 @Service
 class TicketService(private val ticketRepository: TicketRepository) {
     fun generateTicket(vatin: String, firstName: String, lastName: String): Pair<String, ByteArray> {
+        if (vatin.isBlank() || firstName.isBlank() || lastName.isBlank() ) {
+            throw IllegalStateException("Required fields must not be blank")
+        }
         if (ticketRepository.countByVatin(vatin) >= 3) {
             throw IllegalStateException("Maximum number of tickets reached for this VATIN")
         }

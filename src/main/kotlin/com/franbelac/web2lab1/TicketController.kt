@@ -4,6 +4,8 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
 
@@ -26,10 +28,86 @@ class TicketController(private val ticketService: TicketService) {
         return ResponseEntity(qrCodeImage, headers, HttpStatus.CREATED)
     }
 
-    @GetMapping("/overview/{id}")
-    fun getTicketInfo(@PathVariable id: UUID): ResponseEntity<Ticket> {
+    @GetMapping("/overview/{id}", produces = [MediaType.TEXT_HTML_VALUE])
+    @ResponseBody
+    fun getTicketInfo(@AuthenticationPrincipal oidcUser: OidcUser, @PathVariable id: UUID): String {
         val ticket = ticketService.getTicketInfo(id)
-        return ResponseEntity.ok(ticket)
+        return """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Ticket Overview</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f0f0f5;
+                        margin: 20px;
+                        padding: 20px;
+                    }
+                    h1 {
+                        color: #333;
+                        background-color: #e6e6ff;
+                        padding: 15px;
+                        border-radius: 5px;
+                        text-align: center;
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    }
+                    h2 {
+                        color: #4d4dff;
+                        margin-top: 30px;
+                    }
+                    table {
+                        width: 100%;
+                        max-width: 600px;
+                        margin: 20px auto;
+                        border-collapse: collapse;
+                        background-color: #fff;
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                        border-radius: 8px;
+                    }
+                    th, td {
+                        padding: 12px 15px;
+                        text-align: left;
+                        border-bottom: 1px solid #ddd;
+                    }
+                    th {
+                        background-color: #4d4dff;
+                        color: white;
+                    }
+                    tr:last-child td {
+                        border-bottom: none;
+                    }
+                    tr:hover {
+                        background-color: #f1f1f1;
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Welcome, ${oidcUser.fullName ?: oidcUser.preferredUsername}!</h1>
+
+                <h2>Ticket Overview</h2>
+                <table>
+                    <tr>
+                        <th>OIB</th>
+                        <td>${ticket.vatin}</td>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <td>${ticket.firstName}</td>
+                    </tr>
+                    <tr>
+                        <th>Surname</th>
+                        <td>${ticket.lastName}</td>
+                    </tr>
+                    <tr>
+                        <th>Created At</th>
+                        <td>${ticket.createdAt}</td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+        """.trimIndent()
     }
 
     @GetMapping("/total", produces = [MediaType.TEXT_HTML_VALUE])
